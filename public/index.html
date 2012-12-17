@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>CrowdProcess</title>
+
+		<meta name="description" content="A Distributed Computing Platform that runs on top of the web">
+		<meta name="author" content="João Jerónimo">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/simple.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+    <script src="http://api.crowdprocess.com/crowdprocess.js"></script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+    <style>
+      .demo-test { columns: 2; }
+      .lotsofcode { font-size: 40%; }
+    </style>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	</head>
+
+	<body>
+
+		<div class="reveal">
+<div class="slides">
+    <section>
+        <section>
+            <h1>CrowdProcess</h1>
+            <div>
+                <img src="img/logo.png" style="border:0" width="200" />
+            </div>
+<pre><code>(function (something) {
+  console.log('hello '+something);
+})('world')</code></pre>
+
+
+
+</section>
+        <section>
+            <h2>CrowdProcess is a&nbsp;</h2>
+            <h2>
+                <font color="#ff9900">web-based</font>
+                <br>
+                <font color="#336699">distributed computing<br>
+                </font>
+                <font color="#00cc66">platform</font>
+            </h2>
+        </section>
+        <section>
+            <div>It's SETI@home on top of <font color="#ff9900">web browsers</font> !</div>
+        </section>
+        <section>
+            <div>imagine <font color="#ff9900">tons of web browsers</font> crunching numbers!</div>
+        </section>
+        <section>
+            <div>all that <font color="#ff9900">power</font> handed to you with a super <font color="#ff9900">simple</font> API</div>
+        </section>
+        <section>
+            <h2>always remember</h2>
+            <div>
+                <br>
+            </div>
+            <div>
+                <br>
+            </div>
+            <blockquote>Distributed Computing is not about solving <font color="#ff9900">small problems faster</font>, its about <font color="#00cc66">solving big problems</font>.</blockquote>
+        </section>
+        <section>
+            <h2>Two sides of the story</h2>
+<div>
+            <br>
+        </div>
+        <div>
+            <img src="http://i.imgur.com/Sx6D0.png" style="border:0" />
+            <br>
+        </div>
+        <div>
+</div>
+
+</section>
+    </section>
+    <section>
+        <section>
+            <h2>For websites</h2>
+            <div>
+                <br>
+            </div>
+            <div>
+                <font color="#ff9900">replace advertising</font>... or not<br>
+                </div>
+                <div>
+                    <div style="text-align: left;">
+                        <br>
+                    </div>
+                    <ul>
+                        <li>less ads =&gt; happier visitors</li>
+                        <li>happier visitors =&gt; more exposure</li>
+                        <li>more exposure =&gt; more revenue ;)</li>
+                    </ul>
+                    <div style="text-align: left;">
+                        <br>
+                    </div>
+                </div>
+                <h3>
+                    <font color="#0066cc" face="impact">Changes the Internet economy</font>
+                </h3>
+            </section>
+            <section>
+                <h2>websites <font color="#ff3300">&lt;3</font> CrowdProcess</h2>
+<div>
+    <ul>
+        <li>loads <font color="#ff9900">asynchronously</font>;</li>
+        <li>{ website { iframe { <font color="#ff9900">Worker</font> } } }</li>
+        <li>main event-loop is cool with it ;)</li>
+        <li>display:none<br>
+        </li>
+    </ul>
+                <div>
+                    <img src="http://i.imgur.com/NtyAK.gif">
+                    <br>
+                </div>
+            </div>
+        </section>
+        <section>
+            <h1>On your website<br>
+            </h1>
+            <div>
+                <br>
+            </div>
+
+<pre><code class="html">&lt;iframe src=&quot;http://ss.crowdprocess.com/#!/H7Xq8gjM&quot; style=&quot;display:none&quot;&gt;&lt;/iframe&gt;</code></pre>
+    </section>
+    <section>
+        <h2>wait wait wait...</h2>
+        <div>
+            <br>
+        </div>
+        <h2>
+            <font color="#ff9900">eval(</font>
+            <font color="#ff0000">user-defined-code</font>
+            <font color="#ff9900">)</font> ?</h2>
+            <div>
+                <img src="http://i.imgur.com/q7j3D.gif">
+                <br>
+            </div>
+        </section>
+        <section>
+            <h2>we have<br>
+            </h2>
+            <h1>
+                <font color="#66cc00">safeEval()</font>
+            </h1>
+        </section>
+        <section>
+            <h2>cool safe eval pattern</h2>
+<pre><code>function safeEval (mapfn) {
+  try {
+    this.f = function () {};
+    return eval(
+      // yes, there's a lot more that didn't fit:
+      '(function (eval, postMessage, Worker, XMLHttpRequest) {'+
+        mapfn+';'+
+        'return({f : CPmap});'+
+      '}).call({});'
+    );
+  } catch (e) {
+    console.error(e, "Failed evaluation of CPmap function");
+  }
+}</code></pre>
+
+
+</section>
+<section>
+    <h2>so.. what happens ?</h2>
+<pre><code>var evil= "function CPmap () {"
+            "while (true) {"+
+              "var req = new XMLHttpRequest();"+
+              "req.open('GET', 'http://smallwebsite.com', false);"+
+              "req.send();"+
+            "}"+
+          "}";
+
+
+var safeFn = safeEval(evil).f;
+// Error: "Failed evaluation of CPmap function"
+// Honey Badger don't care ;)</code></pre>
+</section>
+<section>
+    <h2>No harm to your visitors</h2>
+    <div>
+        <br>
+    </div>
+    <div>
+        <ul>
+            <li>only <font color="#ff9900">one Worker</font> per browser;</li>
+            <li>each Worker runs on only <font color="#ff9900">one thread</font>;</li>
+            <li>pleasant browsing experience.</li>
+        </ul>
+    </div>
+</section>
+<section>
+    <h3>wait wait wait...</h3>
+    <div>
+        <br>
+    </div>
+    <div>
+        <br>
+    </div>
+    <div>Isn't <font color="#00cc66">Javascript</font>...</div>
+    <h1>
+        <font color="#ff0000">slow</font> ?</h1>
+    </section>
+    <section>
+        <h2>Not really ;)</h2>
+<img src="http://i.imgur.com/H8uVy.png">
+    </section>
+    <section>
+        <h3>Is the V8 faster than the JVM ?</h3>
+    </section>
+    <section>
+        <h2>Generally ?</h2>
+        <div>
+            <br>
+        </div>
+        <div>
+            <br>
+        </div>
+        <h1>
+            <font color="#ff3300">Nope</font>
+        </h1>
+    </section>
+    <section>
+        <h2>Specific highly optimized code on both sides ?</h2>
+        <div>
+            <br>
+        </div>
+        <h1>
+            <font color="#ff3300">Nope</font>
+        </h1>
+        <div>
+            <font color="#ff3300">
+                <br>
+            </font>
+        </div>
+        <h6>well, actually, <font color="#00cc66">it depends</font>
+    </h6>
+</section>
+<section>
+    <h2>Naive code ?</h2>
+<h1>
+    <font color="#00ff00">YES!</font>
+</h1>
+<h6 style="font-size:30%">
+    <font color="#ff6600">most of the times</font>
+</h6>
+<div>
+    <img src="http://i.imgur.com/3mkcf.gif">
+    <font color="#00cc66">
+        <br>
+    </font>
+</div>
+</section>
+    <section>Javascript vs Java (benchmarking math)<div>
+        <img src="http://i.imgur.com/Nojag.png">
+        <br>
+    </div>
+    <h6>
+        <a href="http://www.redcode.nl/blog/2012/07/java-speed-of-math/">
+            <font color="#000000">http://www.redcode.nl/blog/2012/07/java-speed-of-math/</font>
+        </a>
+    </h6>
+</section>
+</section>
+<section>
+    <section>
+        <h2>For our users</h2>
+        <div>
+            <br>
+        </div>
+        <div>
+            <br>
+        </div>
+        <div>
+            <ul>
+                <li>Easy;</li>
+                <li>Simple;</li>
+                <li>Sexy;</li>
+                <li>Powerful;</li>
+            </ul>
+        </div>
+    </section>
+        <section>
+            <h2>How easy is it ?<br>
+            </h2>
+        </section>
+        <section>
+            <h2>Jobs and Tasks</h2>
+            <div>
+                <br>
+            </div>
+            <div>
+                <img src="http://i.imgur.com/pJsjT.png">
+                <br>
+            </div>
+        </section>
+        <section>
+            <h2>Jobs</h2>
+            <div>
+                <br>
+            </div>
+            <div>
+                <ul>
+                    <li>Are defined by the user</li>
+                    <li>Are assigned to the provider</li>
+                    <li>Contain the <font color="#ff9900">map function</font>
+                </li>
+            </ul>
+    </section>
+    <section>
+        <h2>Tasks</h2>
+        <div>
+            <br>
+        </div>
+        <div>
+            <ul>
+                <li>Are created by the user</li>
+                <li>Are solved by the provider</li>
+                <li>Contain the <font color="#ff9900">input and output</font>
+            </li>
+        </ul>
+    </div>
+</section>
+<section>
+    <h1>Hello World</h1>
+    <div>in CrowdProcess</div>
+</section>
+<section>
+<div>Install the crp utility</div>
+<pre><code class="sh">curl http://crowdprocess.com/bash/install.sh | bash</code></pre>
+
+</section>
+<section>
+<div>Create the job</div>
+<pre><code class="sh">crp helloworld create</code></pre>
+</section>
+<section>
+<div>Clone something from the app market</div>
+<pre><code>crp helloworld clone helloworld</code></pre>
+</section>
+<section>
+<div>Pipe in some tasks</div>
+<pre><code class="sh">cat input.txt | crp helloworld tasks create</code></pre>
+</section>
+<section>
+<div>Activate your job</div>
+<pre><code class="sh">crp helloworld activate</code></pre>
+</section>
+<section>
+<div>Get your results</div>
+<pre><code class="sh">crp helloworld results &gt;&gt; output.txt</code></pre>
+</section>
+<section>
+<h1>done!</h1>
+<p>Hello CrowdProcess in 5 lines ;)</p>
+</section>
+    <section>
+        <h2>Alternatives ?</h2>
+<div>
+    <br>
+</div>
+<div>
+    <br>
+</div>
+<div>
+    <br>
+</div>
+<blockquote>
+    <i>Someone should use Hadoop to&nbsp;analyse all the error logs generated by Hadoop</i>
+</blockquote>
+</section>
+</section>
+<section>
+    <section>
+        <h1>
+    <br>
+</h1>
+<h1>Cool Features<br>
+</h1>
+</section>
+        <section>
+            <h2>Pipes !</h2>
+
+            <div>
+                <br>
+            </div>
+<pre><code class="sh">crp enhanceContrast pipe turnToBlackAndWhite</code></pre>
+<div>
+    <ul>
+        <li>allows to write smaller, simpler jobs;</li>
+        <li>make a huge pipeline of small jobs;</li>
+        <li>one job should do only one thing, and do it well;</li>
+    </ul>
+</div>
+
+
+
+</section>
+            <section>
+                <h2>App Market!</h2>
+<div>
+    <br>
+</div>
+<div>Don't feel bad about not knowing JS ;)</div>
+<pre><code class="sh">crp turnToBlackAndWhite create
+crp turnToBlackAndWhite clone turnToBlackAndWhite</code></pre>
+    </section>
+</section>
+<section>What's under the hood ?<div>
+    <br>
+</div>
+<div>
+    <ul>
+        <li>Servers with Node.JS and GO</li>
+        <li>Stateless servers FTW</li>
+        <li>Streams everywhere</li>
+        <li>Garbage-collector friendly</li>
+        <li>db: 100% Redis (now)</li>
+        <li>AppMarket on top of CouchDB</li>
+    </ul>
+</div>
+</section>
+<section>
+    <section>
+        <h1>Examples</h1>
+    </section>
+    <section>
+        <h2>1. Hello World</h2>
+        <div class="demo-test">
+          <div>
+            <pre><code id="helloworldcode"></code></pre>
+          </div>
+          <div>
+            <button id="helloworldbutton">GO!</button>
+          </div>
+        </div>
+        <script>
+          $(function () {
+            console.log('putting it there')
+            $('#helloworldcode').text($('#helloworld').text())
+          });
+        </script>
+        <script id="helloworld" class="lotsofcode">$('#helloworldbutton').click(function () {
+  CrowdProcessRPCAPI({ username: 'testuser', password: 'testpassword'}, function (err, api) {
+    api.job('helloworld', function (job) {
+      console.log(1, job)
+      job.create(function (err, created) {
+        console.log(2, created)
+        job.configure({
+          map: (
+              function CPmap (obj) {
+                return ("hello "+obj);
+              }
+            ).toString()
+        }, function (err, newConf) {
+          console.log(3, newConf)
+          var tasks = job.tasks;
+          var n = 10;
+          while (n--) {
+            tasks.create({Obj: "world!"});
+          }
+          job.bid(10, function (err, newConf) {
+            console.log(4, newConf)
+            job.activate(function (err, newConf) {
+              console.log(5, newConf)
+              job.results.dump(function (data) {
+                console.log('got result: ', data);
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+});</script>
+    </section>
+        <section>
+            <h2>2. Pi</h2>
+            <div class="demo-test">
+              <div>
+                <pre><code id="picode"></code></pre>
+              </div>
+              <div>
+                <button id="pibutton">GO!</button>
+              </div>
+            </div>
+            <script>
+              $(function () {
+                $('#picode').text($('#pi').text())
+              });
+            </script>
+            <script id="pi" class="lotsofcode">$('#pibutton').click(function () {
+      CrowdProcessRPCAPI({ username: 'testuser', password: 'testpassword'}, function (err, api) {
+        api.job('pi', function (job) {
+          console.log(1, job)
+          job.create(function (err, created) {
+            console.log(2, created)
+            job.configure({
+              map: (
+                function CPmap (obj) {
+                  var inQuarterCircle = 0;
+                  var n = 100000;
+                  var i = n;
+                  var start = Date.now();
+                  while (i--) {
+                    if (Math.pow(Math.random(), 2) + Math.pow(Math.random(), 2) < 1) {
+                      inQuarterCircle += 1;
+                    }
+                  }
+                  return (inQuarterCircle);
+                }
+                ).toString()
+            }, function (err, newConf) {
+              console.log(3, newConf)
+              var tasks = job.tasks;
+              tasks.createBlankTasks(10000, function (err, created) {
+                console.log(4, created);
+                job.bid(10, function (err, newConf) {
+                  console.log(5, newConf)
+                  job.activate(function (err, newConf) {
+                    console.log(6, newConf);
+                    var total = 0;
+                    var totalInQuarterCircle = 0;
+                    var totalTime = 0;
+                    var start = Date.now();
+                    job.results.dump(function (data) {
+                      var r = JSON.parse(data);
+                      var dist = parseInt(r.s) || 0;
+                      if (dist > 0) {
+                        total += 100000;
+                        totalInQuarterCircle += dist;
+                        totalTime += parseInt(r.t);
+                        var actualTime = Date.now() - start;
+                        var timeSaved = totalTime - actualTime;
+                        var timeSavedPercent = timeSaved/totalTime;
+                        console.log('pi = ', 4*totalInQuarterCircle/total, "CPU time = ", totalTime, "actual time = ", actualTime, "time saved = ", timeSaved, "time saved % = ", timeSavedPercent);
+                      }
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });</script>
+        </section>
+</section>
+<section>
+    <section>
+        <h1>The future</h1>
+    </section>
+    <section>
+        <h2>The platform</h2>
+<div>
+    <br>
+</div>
+<div>
+    <ul>
+        <li>Tasks will be stored on Riak+LevelDB&nbsp;<span style="font-size: 30.0%;">(on those sweet SSD EC2 instances)</span>
+        </li>
+        <li>WebGL</li>
+        <li>WebCL</li>
+    </ul>
+</div>
+</section>
+        <section>
+            <h2>The website</h2>
+<div>
+    <ol>
+        <li>Have a proper website</li>
+        <li>Have a proper App Market interface</li>
+        <li>Sweet pseudo IDE for Jobs <span style="font-size: 30.0%;">(people love that shit)</span>
+        </li>
+    </ol>
+</div>
+</section>
+    </section>
+    <section>
+        <h2>Thanks</h2>
+        <div>
+            <img src="http://i.imgur.com/EDCSD.gif">
+            <br>
+        </div>
+        <div>http://crowdprocess.com</div>
+        <div>jj@crowdprocess.com</div>
+        <div>@joaojeronimo</div>
+    </section>
+</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'zoom', // default/cube/page/concave/zoom/linear/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+	</body>
+</html>
